@@ -8,6 +8,7 @@ import (
 	"net/url"
 
 	"github.com/SPECTRA-proxy/SPECTRA/internal/ids"
+	"github.com/SPECTRA-proxy/SPECTRA/internal/pqc"
 	"github.com/SPECTRA-proxy/SPECTRA/internal/stubs"
 )
 
@@ -58,12 +59,17 @@ func (sp *SpectraProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Step 1: Module 1 Validation (Adaptive PQC Handshake)
-	validPQC, scheme := stubs.VerifyPQC(r)
-	if !validPQC {
-		http.Error(w, "Access Denied: Quantum Cryptographic Handshake Failed", http.StatusUnauthorized)
+	// Step 1: Module 1 — Adaptive PQC Handshake (ML-KEM + ML-DSA via Python sidecar)
+	pqcResult, err := pqc.NegotiateHandshake(r)
+	if err != nil {
+		log.Printf("[MOD 1 - PQC] REJECTED: PQC handshake failed for %s — %v", effectiveIP, err)
+		http.Error(w, "Access Denied: Post-Quantum Cryptographic Handshake Failed", http.StatusUnauthorized)
 		return
 	}
+	scheme := fmt.Sprintf("%s / %s", pqcResult.KEMScheme, pqcResult.DSAScheme)
+	// Expose the negotiated tier and PQC latency in response headers for observability
+	w.Header().Set("X-Spectra-PQC-Tier", pqcResult.Tier)
+	w.Header().Set("X-Spectra-PQC-Latency", fmt.Sprintf("%.2fµs", pqcResult.LatencyUS))
 
 	// Step 1.5: Module 3 L7 Deep Packet Inspection (Fast-Path Static Coarse Filter)
 	idsAlert := ids.InspectRequest(r)

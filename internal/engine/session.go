@@ -56,7 +56,10 @@ func GetEffectiveClientIP(r *http.Request) string {
 
 // ExtractSessionID extracts the session token from header, cookie, or generates a default
 func ExtractSessionID(r *http.Request) string {
-	// 1. Check custom header
+	// 1. Check custom headers
+	if sid := r.Header.Get("X-Spectra-Session-ID"); sid != "" {
+		return sid
+	}
 	if sid := r.Header.Get("X-Session-ID"); sid != "" {
 		return sid
 	}
