@@ -1,67 +1,43 @@
 import numpy as np
 import pandas as pd
-import joblib
 import matplotlib.pyplot as plt
 
-# Reproducibility
-np.random.seed(300)
+from m4_interface import FEATURES, MFA_THRESHOLD, model, calculate_risk
 
-# Load trained model
-model = joblib.load("results/isolation_forest.pkl")
+rng = np.random.default_rng(300)
 
-features = [
-    "packet_size",
-    "request_rate",
-    "connection_count",
-    "inter_arrival_time"
-]
-
-# Generate normal samples
 normal = pd.DataFrame({
-    "packet_size": np.random.normal(500, 80, 100),
-    "request_rate": np.random.normal(5, 1.5, 100),
-    "connection_count": np.random.normal(3, 1, 100),
-    "inter_arrival_time": np.random.normal(0.2, 0.05, 100)
-})
+    "packet_size": rng.normal(500, 80, 100),
+    "request_rate": rng.normal(5, 1.5, 100),
+    "connection_count": rng.normal(3, 1, 100),
+    "inter_arrival_time": rng.normal(0.2, 0.05, 100),
+}).clip(lower=0.001)
 
-# Generate anomalous samples
 anomaly = pd.DataFrame({
-    "packet_size": np.random.uniform(5000, 10000, 30),
-    "request_rate": np.random.uniform(100, 300, 30),
-    "connection_count": np.random.uniform(30, 80, 30),
-    "inter_arrival_time": np.random.uniform(0.001, 0.01, 30)
+    "packet_size": rng.uniform(5000, 10000, 30),
+    "request_rate": rng.uniform(100, 300, 30),
+    "connection_count": rng.uniform(30, 80, 30),
+    "inter_arrival_time": rng.uniform(0.001, 0.01, 30),
 })
 
-# Combine data
-data = pd.concat([normal, anomaly], ignore_index=True)
+normal_scores = model.decision_function(normal[FEATURES])
+anomaly_scores = model.decision_function(anomaly[FEATURES])
+normal_risk = [calculate_risk(score) for score in normal_scores]
+anomaly_risk = [calculate_risk(score) for score in anomaly_scores]
 
-# Model prediction
-predictions = model.predict(data[features])
-
-# Use packet size and request rate for visualization
 plt.figure(figsize=(9, 6))
-
-plt.scatter(
-    normal["packet_size"],
-    normal["request_rate"],
-    label="Normal"
-)
-
-plt.scatter(
-    anomaly["packet_size"],
-    anomaly["request_rate"],
-    label="Synthetic Anomaly"
-)
-
+plt.scatter(normal["packet_size"], normal["request_rate"], label="Normal")
+plt.scatter(anomaly["packet_size"], anomaly["request_rate"], label="Synthetic Anomaly")
 plt.xlabel("Packet Size (bytes)")
 plt.ylabel("Request Rate (requests/sec)")
 plt.title("SPECTRA M4: Network Behaviour Distribution")
 plt.legend()
 plt.grid(True)
-
-plt.savefig("results/network_behavior.png", dpi=300)
-
+plt.savefig("results/network_behavior.png", dpi=300, bbox_inches="tight")
 plt.show()
 
-print("Visualization saved to:")
-print("results/network_behavior.png")
+print("Normal samples with risk >= MFA threshold:",
+      sum(r >= MFA_THRESHOLD for r in normal_risk), "/", len(normal_risk))
+print("Synthetic anomalies with risk >= MFA threshold:",
+      sum(r >= MFA_THRESHOLD for r in anomaly_risk), "/", len(anomaly_risk))
+print("Visualization saved to results/network_behavior.png")

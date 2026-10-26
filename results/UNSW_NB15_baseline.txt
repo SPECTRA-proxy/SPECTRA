@@ -1,0 +1,55 @@
+================================================================================
+REAL UNSW-NB15 BASELINE — DO NOT CONFUSE WITH SYNTHETIC RESULTS
+================================================================================
+Recorded: 2026-10-08
+Evaluation script: src/evaluate_unsw_nb15.py
+
+Dataset Split:
+- Total training rows (Normal only): 56,000
+  - Normal fit split (80%): 44,800
+  - Normal calibration split (20%): 11,200
+- Total test samples: 82,332
+  - Normal test samples (label == 0): 37,000
+  - Attack test samples (label == 1): 45,332
+
+Model Configuration:
+- Model: Isolation Forest (unsupervised, fit only on normal traffic)
+- Contamination parameter: 0.05
+- n_estimators: 100
+- Features (4):
+  - packet_size (UNSW-NB15: smean)
+  - request_rate (UNSW-NB15: rate)
+  - connection_count (UNSW-NB15: ct_srv_src)
+  - inter_arrival_time (UNSW-NB15: sinpkt / 1000)
+- Calibration: Empirical percentile against 11,200 held-out normal samples
+- Decision threshold: MFA threshold >= 0.970, DROP threshold >= 0.995
+
+Overall Real Test Metrics:
+- Precision: 0.8312
+- Recall: 0.1778
+- F1-score: 0.2929
+- False-Positive Rate (FPR): 0.0442
+- ROC-AUC: 0.7570
+- Median latency: 5.720 ms
+- P95 latency: 8.439 ms
+
+Confusion Matrix:
+[[35363  1637]
+ [37272  8060]]
+- True Negatives (TN): 35,363
+- False Positives (FP): 1,637
+- False Negatives (FN): 37,272
+- True Positives (TP): 8,060
+
+Per Attack Category Recall:
+- Analysis:       0.0487 (4.87%)
+- Backdoor:       0.0532 (5.32%)
+- DoS:            0.0274 (2.74%)
+- Exploits:       0.0152 (1.52%)
+- Fuzzers:        0.0843 (8.43%)
+- Generic:        0.3778 (37.78%)
+- Reconnaissance: 0.0160 (1.60%)
+- Shellcode:      0.0450 (4.50%)
+- Worms:          0.0455 (4.55%)
+- Normal:         0.0000 (0.00%)
+================================================================================

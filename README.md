@@ -1,214 +1,168 @@
-# SPECTRA M4 — Asynchronous AI Risk Engine
+# SPECTRA M4 — AI Risk Engine
 
-## Overview
+## What changed
 
-SPECTRA is a cybersecurity research prototype designed to analyze
-network behavior and support adaptive security decisions.
+This version fixes the prototype risk-calibration problem and separates
+synthetic demonstration results from real-dataset evaluation.
 
-This repository contains **Module 4 (M4): the Asynchronous AI Risk
-Engine**.
+### 1. Held-out percentile calibration
 
-M4 uses unsupervised machine learning to identify network behaviors
-that deviate from a learned normal baseline and converts the resulting
-anomaly signal into a normalized risk score.
+The Isolation Forest is trained on normal traffic only. The normal data is
+split into a training portion and a held-out calibration portion.
 
-## M4 Problem
-
-Traditional security systems may rely heavily on static rules or
-known attack signatures.
-
-M4 explores a behavioral approach:
-
-> Given network telemetry describing a session, can we identify
-> behavior that significantly deviates from normal activity and
-> translate that deviation into a security risk score?
-
-## Architecture
+For a new observation:
 
 ```text
-Network Telemetry
-       |
-       v
-Feature Vector
-       |
-       v
-Isolation Forest
-       |
-       v
-Anomaly Detection
-       |
-       v
-Isolation Score
-       |
-       v
-Risk Normalization
-       |
-       v
-Risk Score (0-1)
-       |
-       v
-Security Decision
-       |
-   +---+---+
-   |   |   |
- ALLOW MFA DROP
-Telemetry Features
+Isolation Forest decision_function
+        |
+        v
+negative score = anomaly score
+        |
+        v
+empirical percentile vs held-out normal scores
+        |
+        v
+risk score in [0, 1]
+```
 
-The current prototype uses four features:
+Interpretation:
 
-packet_size — observed packet size in bytes
-request_rate — requests per second
-connection_count — number of observed connections
-inter_arrival_time — time between consecutive events
-Machine Learning
+- `0.97` = more anomalous than approximately 97% of the held-out normal reference traffic.
+- `risk < 0.97` → `ALLOW`
+- `0.97 <= risk < 0.995` → `MFA / MONITOR`
+- `risk >= 0.995` → `DROP`
 
-M4 currently uses an Isolation Forest model.
+These are prototype engineering thresholds, not universal security standards.
 
-The model is trained primarily on normal telemetry. It then evaluates
-new observations and identifies behavioral deviations.
+### 2. No duplicate risk logic
 
-Isolation Forest was selected because the prototype focuses on
-unsupervised anomaly detection rather than requiring a complete set
-of labeled attack samples.
+`risk_engine.py` now calls `m4_interface.py` instead of maintaining a second
+implementation.
 
-Risk Scoring
+### 3. Robust paths
 
-The anomaly signal produced by the model is transformed into a
-normalized risk score between 0 and 1.
+Model and calibration files are resolved relative to the M4 project directory,
+so commands do not depend on the current working directory.
 
-The prototype maps the risk score to three policy outcomes:
+### 4. Inference timing
 
-Risk Level	Prototype Decision
-Low	ALLOW
-Medium	MFA / MONITOR
-High	DROP
+The interface calls `decision_function()` once and reports inference latency.
+The exact latency depends on the machine and should be measured on the machine
+used for the review.
 
-The thresholds are configurable engineering parameters and are not
-intended to represent universal cybersecurity standards.
+### 5. Evaluation
 
-Evaluation
+`evaluate_model.py` is explicitly a **synthetic sanity test**. It reports:
 
-The model was evaluated using synthetic anomalous network behaviors.
+- Precision
+- Recall
+- F1-score
+- ROC-AUC
+- False-positive rate
+- Median/P95 inference latency
 
-The tuned configuration achieved:
+It must not be presented as real-world detection performance.
 
-Accuracy: 94%
-Anomaly precision: 76%
-Anomaly recall: 100%
-Anomaly F1-score: 0.86
+`evaluate_unsw_nb15.py` evaluates the same four-feature M4 design on UNSW-NB15
+when the official CSV files are placed under `data/`.
 
-Additional testing was performed against synthetic behaviors such as:
+The mapping is:
 
-High request rate
-Large packets
-High connection count
-Combined anomalous behavior
+| M4 feature | UNSW-NB15 field |
+|---|---|
+| `packet_size` | `smean` |
+| `request_rate` | `rate` |
+| `connection_count` | `ct_srv_src` |
+| `inter_arrival_time` | `sinpkt / 1000` |
 
-The anomaly F1-scores for these tests were approximately 0.96–0.97.
+Training remains unsupervised: only `label == 0` rows from the UNSW training
+file are used to fit the Isolation Forest. A held-out normal split is used for
+risk calibration.
 
-Example
-Normal behavior
-Packet size:       520 bytes
-Request rate:      6 requests/sec
-Connections:       3
-Inter-arrival:     0.18 sec
+## Run
 
-Anomaly:           FALSE
-Risk score:        0.20
-Decision:          ALLOW
-Suspicious behavior
-Packet size:       9500 bytes
-Request rate:      300 requests/sec
-Connections:       80
-Inter-arrival:     0.002 sec
+Install dependencies:
 
-Anomaly:           TRUE
-Risk score:        0.90
-Decision:          DROP
-Project Structure
-SPECTRA-M4/
-|
-├── data/
-|   └── normal_telemetry.csv
-|
-├── results/
-|   ├── isolation_forest.pkl
-|   └── network_behavior.png
-|
-├── src/
-|   ├── generate_dataset.py
-|   ├── train_model.py
-|   ├── test_model.py
-|   ├── evaluate_model.py
-|   ├── anomaly_types_test.py
-|   ├── risk_engine.py
-|   ├── visualize_results.py
-|   ├── demo.py
-|   └── m4_interface.py
-|
-├── .gitignore
-└── README.md
-Running the Project
-
-Install the required Python packages:
-
+```bash
 pip install numpy pandas scikit-learn matplotlib joblib
+```
 
-Generate the normal telemetry dataset:
+From the M4 project root:
 
+```bash
 python src/generate_dataset.py
-
-Train the Isolation Forest:
-
 python src/train_model.py
-
-Run the interactive M4 demonstration:
-
 python src/demo.py
+python src/evaluate_model.py
+python src/test_model.py
+```
 
-The demonstration accepts telemetry from the user and produces an
-anomaly result, risk score and security decision.
+For UNSW-NB15, place:
 
-M3 Integration
+```text
+data/UNSW_NB15_training-set.csv
+data/UNSW_NB15_testing-set.csv
+```
 
-M4 exposes a telemetry interface so that the eventual integrated
-system can receive telemetry generated by M3.
+then run:
 
-Conceptually:
+```bash
+python src/evaluate_unsw_nb15.py
+python src/visualize_unsw_nb15.py
+```
 
-M3
- |
- | Network Telemetry
- v
-M4
- |
- | Risk / Decision
- v
-M2
+## Real UNSW-NB15 Baseline Evaluation
 
-The current implementation allows M4 to operate independently while
-maintaining a defined interface for future integration.
+Evaluated on 82,332 test samples (37,000 normal, 45,332 attack):
 
-Limitations
+| Metric | Real UNSW-NB15 Baseline | Synthetic Sanity Test |
+|---|---|---|
+| Precision | **83.12%** | 76.92% |
+| Recall | **17.78%** | 100.00% |
+| F1-score | **29.29%** | 86.96% |
+| False-Positive Rate | **4.42%** | 7.50% |
+| ROC-AUC | **0.7570** | 1.0000 |
+| Median Latency | **5.720 ms** | 6.242 ms |
+| P95 Latency | **8.439 ms** | — |
 
-This is an experimental cybersecurity prototype.
+Generated artifacts:
+- `results/UNSW_NB15_baseline.txt`: Full metric and attack-category recall breakdown.
+- `results/unsw_nb15_attack_recall.png`: Category-level detection recall bar chart.
+- `results/unsw_nb15_roc_confusion.png`: Continuous score ROC curve and confusion matrix.
 
-The current evaluation uses synthetic telemetry rather than claiming
-real-world attack-detection performance.
+## Project structure
 
-The current implementation also uses a relatively small feature set
-and prototype risk thresholds.
+```text
+SPECTRA-M4/
+├── data/
+│   ├── normal_telemetry.csv
+│   ├── UNSW_NB15_training-set.csv
+│   └── UNSW_NB15_testing-set.csv
+├── results/
+│   ├── isolation_forest.pkl
+│   ├── risk_calibration.npz
+│   ├── network_behavior.png
+│   ├── UNSW_NB15_baseline.txt
+│   ├── unsw_nb15_attack_recall.png
+│   └── unsw_nb15_roc_confusion.png
+├── src/
+│   ├── paths.py
+│   ├── generate_dataset.py
+│   ├── train_model.py
+│   ├── m4_interface.py
+│   ├── risk_engine.py
+│   ├── demo.py
+│   ├── test_model.py
+│   ├── evaluate_model.py
+│   ├── evaluate_unsw_nb15.py
+│   ├── anomaly_types_test.py
+│   ├── visualize_results.py
+│   └── visualize_unsw_nb15.py
+└── README.md
+```
 
-Future work includes:
+## Limitations
 
-Integration with real M3 telemetry
-Cross-layer telemetry fusion
-Evaluation using real-world datasets
-Improved feature engineering
-Risk-threshold calibration
-Integration with the M2 policy-enforcement module
-Disclaimer
-
-The reported evaluation results describe the current synthetic
-experimental dataset and should not be interpreted as production
-security performance.
+The standalone M4 prototype still uses only four flow/telemetry features.
+Cross-layer identity/session fusion and live M3 aggregation are not silently
+claimed as implemented here. Those require additional integration work.

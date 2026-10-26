@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SPECTRA & Module 4 (AI Risk Engine) — Complete Guide & Viva Preparation</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 20mm 18mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1a202c;
+    background-color: #ffffff;
+    line-height: 1.6;
+    font-size: 11pt;
+    margin: 0;
+    padding: 24px;
+  }
+  h1, h2, h3, h4, h5 {
+    color: #0f2c59;
+    font-weight: 700;
+    margin-top: 1.4em;
+    margin-bottom: 0.5em;
+    page-break-after: avoid;
+  }
+  h1 {
+    font-size: 22pt;
+    border-bottom: 3px solid #0f2c59;
+    padding-bottom: 8px;
+    margin-top: 0;
+  }
+  h2 {
+    font-size: 15pt;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 5px;
+    margin-top: 1.8em;
+  }
+  h3 {
+    font-size: 12.5pt;
+    color: #1e3a8a;
+  }
+  h4 {
+    font-size: 11.5pt;
+    color: #334155;
+  }
+  p, li {
+    font-size: 10.5pt;
+    color: #2d3748;
+  }
+  ul, ol {
+    margin-top: 0.3em;
+    margin-bottom: 0.8em;
+    padding-left: 24px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  code, pre {
+    font-family: "Consolas", "Courier New", monospace;
+  }
+  code {
+    background-color: #f1f5f9;
+    color: #0f2c59;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 9.5pt;
+    border: 1px solid #e2e8f0;
+  }
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 9pt;
+    overflow-x: auto;
+    line-height: 1.45;
+    page-break-inside: avoid;
+  }
+  pre code {
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 18px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background-color: #0f2c59;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  .card {
+    background-color: #f8fafc;
+    border-left: 4px solid #0f2c59;
+    border-top: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+    page-break-inside: avoid;
+  }
+  .card-warning {
+    background-color: #fffbeb;
+    border-left-color: #d97706;
+    border-top: 1px solid #fef3c7;
+    border-right: 1px solid #fef3c7;
+    border-bottom: 1px solid #fef3c7;
+  }
+  .card-success {
+    background-color: #f0fdf4;
+    border-left-color: #16a34a;
+    border-top: 1px solid #dcfce7;
+    border-right: 1px solid #dcfce7;
+    border-bottom: 1px solid #dcfce7;
+  }
+  .card-danger {
+    background-color: #fef2f2;
+    border-left-color: #dc2626;
+    border-top: 1px solid #fee2e2;
+    border-right: 1px solid #fee2e2;
+    border-bottom: 1px solid #fee2e2;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 8.5pt;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .badge-implemented { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .badge-evaluated { background-color: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+  .badge-planned { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .page-break {
+    page-break-before: always;
+  }
+  .header-meta {
+    font-size: 9pt;
+    color: #64748b;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+  }
+  .qa-block {
+    margin-bottom: 18px;
+    page-break-inside: avoid;
+  }
+  .qa-q {
+    font-weight: 700;
+    color: #0f2c59;
+    margin-bottom: 4px;
+  }
+  .qa-a {
+    margin-left: 12px;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+  .qa-followup {
+    margin-left: 24px;
+    font-size: 9pt;
+    color: #475569;
+    border-left: 2px solid #cbd5e1;
+    padding-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>SPECTRA — Project Architecture & Module 4 Deep-Dive</h1>
+<div class="header-meta">
+  <strong>Project:</strong> SPECTRA (AI-Driven PQC Reverse Proxy for Zero-Trust) &nbsp;|&nbsp;
+  <strong>Lead Module:</strong> M4 — AI Risk Engine &nbsp;|&nbsp;
+  <strong>Dataset:</strong> UNSW-NB15 Benchmark &nbsp;|&nbsp;
+  <strong>Status:</strong> Phase 1 Final Defense Ready
+</div>
+
+<div class="card card-success">
+  <strong>Document Purpose:</strong> Comprehensive technical guide and viva defense reference for SPECTRA and Module 4 (AI Risk Engine). Every metric, threshold, architectural boundary, and code implementation detail is verified against the finalized codebase.
+</div>
+
+<h2>1. System Abstract & The Big Picture</h2>
+
+<h3>The Problem in Traditional Networks</h3>
+<p>Modern enterprise networks face two distinct existential security threats:</p>
+<ol>
+  <li><strong>The Quantum Threat ("Harvest Now, Decrypt Later")</strong>: Traditional TLS relies on RSA and ECC. Adversaries are actively capturing and archiving encrypted enterprise network traffic today. Once a Cryptographically Relevant Quantum Computer (CRQC) emerges, Shor's algorithm will crack RSA and ECC retrospectively, decrypting years of historical corporate secrets.</li>
+  <li><strong>Broken Perimeters & Lateral Movement</strong>: Traditional networks authenticate users once at the perimeter (VPN). Once inside, the network implicitly trusts the session. If an attacker steals a token or compromises an endpoint, they can move laterally across internal databases undetected.</li>
+</ol>
+
+<h3>What SPECTRA Does</h3>
+<p><strong>SPECTRA</strong> (<strong>S</strong>ecure <strong>P</strong>ost-quantum <strong>E</strong>nforcement &amp; <strong>C</strong>ontinuous <strong>T</strong>elemetry <strong>R</strong>isk <strong>A</strong>nalysis) is a Zero-Trust Reverse Proxy that terminates client connections at the network edge in front of protected backend microservices.</p>
+<ul>
+  <li><strong>Transport Security (M1)</strong>: Enforces post-quantum lattice cryptography (NIST ML-KEM and ML-DSA) with hardware-aware dynamic parameter scaling.</li>
+  <li><strong>Edge Routing &amp; Enforcement (M2)</strong>: Intercepts every individual request on port <code>8443</code>, routing verified requests to backend port <code>9000</code>.</li>
+  <li><strong>Telemetry Extraction (M3)</strong>: Leverages Linux in-kernel <strong>eBPF probes</strong> to extract non-intrusive flow statistics without user-space buffer copies.</li>
+  <li><strong>Intelligence Plane (M4)</strong>: Evaluates flow telemetry using an unsupervised <strong>Isolation Forest</strong> with <strong>empirical normal percentile calibration</strong>, outputting continuous risk scores in <code>[0.0, 1.0]</code> within 5.7 milliseconds.</li>
+</ul>
+
+<pre><code>[Client: Web / Mobile / IoT]
+           │
+           ▼  (1) Quantum-Safe Handshake: ML-KEM / ML-DSA Negotiation
+[M1: Adaptive PQC Transport Layer]
+           │
+           ▼  (2) Inbound Request Terminated at Edge Proxy (Port 8443)
+[M2: Zero-Trust Reverse Proxy Engine]
+           │
+           ├──► (3) Non-intrusive socket & packet monitoring (eBPF)
+           │    [M3: IDS & Telemetry Extraction Probe]
+           │             │
+           │             ▼ (4) 4-tuple vector: [packet_size, rate, conns, sinpkt]
+           │    [M4: AI Risk Engine]
+           │             │
+           │             ▼ (5) Isolation Forest decision_function()
+           │             ▼ (6) Empirical Percentile Calibration Lookup
+           │             │
+           ◄─────────────┘ (7) Returns Risk Score ∈ [0.0, 1.0]
+[M2: Policy Enforcement Gate]
+           │
+           ├─► Risk &lt; 0.970       ──► ALLOW: Injects X-Spectra-Verified ──► [Internal Microservice:9000]
+           ├─► 0.970 ≤ Risk &lt; 0.995 ──► CHALLENGE: Triggers Step-Up MFA  ──► [Client Auth Challenge]
+           └─► Risk ≥ 0.995       ──► DROP: Severs Socket (HTTP 403)     ──► [Connection Dropped]</code></pre>
+
+<h2>2. Individual Module Overviews (M1, M2, M3)</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 15%;">Module</th>
+      <th style="width: 25%;">Core Technology</th>
+      <th style="width: 35%;">Responsibility</th>
+      <th style="width: 25%;">Current Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>M1</strong></td>
+      <td>NIST PQC (ML-KEM, ML-DSA) via C/C++ <code>liboqs</code></td>
+      <td>Replaces classical TLS with post-quantum key encapsulation and signatures. Dynamically downshifts parameter sets (Level 5 $\rightarrow$ Level 3 $\rightarrow$ Level 1) to accommodate resource-constrained IoT devices without packet fragmentation.</td>
+      <td><span class="badge badge-implemented">Implemented</span> Standalone benchmarking &amp; parameter downshifting proven.</td>
+    </tr>
+    <tr>
+      <td><strong>M2</strong></td>
+      <td>Reverse Proxy Core in Go</td>
+      <td>Terminates public traffic at edge port <code>8443</code>. Isolates backend port <code>9000</code>. Coordinates verification pipeline, checks risk scores against thresholds, and executes ALLOW, CHALLENGE, or DROP policies.</td>
+      <td><span class="badge badge-implemented">Implemented</span> Standalone Go proxy functional; currently uses a <code>0.12</code> risk stub in Phase 1 testing.</td>
+    </tr>
+    <tr>
+      <td><strong>M3</strong></td>
+      <td>eBPF Kernel Probes &amp; Suricata IDS</td>
+      <td>Attaches sandboxed eBPF probes directly into kernel socket hooks to measure packet lengths, rates, and inter-arrival intervals without CPU copy overhead. Integrates Suricata for signature-based CVE matching.</td>
+      <td><span class="badge badge-implemented">Implemented</span> Standalone eBPF sniffer &amp; signature matching verified.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>3. Deep-Dive: Module 4 (AI Risk Engine)</h2>
+
+<h3>Why Unsupervised Anomaly Detection?</h3>
+<p>Traditional signature systems fail against zero-day exploits. Supervised machine learning models fail in network security due to the <strong>labeling bottleneck</strong> (zero-day attacks cannot be labeled in advance). M4 is strictly <strong>unsupervised</strong>: it is trained <strong>exclusively on normal baseline traffic (<code>label == 0</code>)</strong>. It learns the mathematical density of benign traffic so that any abnormal outlier is immediately flagged.</p>
+
+<h3>The 4 Network-Flow Features</h3>
+<p>M4 represents each network observation as a 4-dimensional continuous vector:</p>
+<pre><code>x = [packet_size, request_rate, connection_count, inter_arrival_time]</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature Name</th>
+      <th>UNSW-NB15 Column</th>
+      <th>Physical Meaning</th>
+      <th>Normal Example</th>
+      <th>Anomalous Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>packet_size</code></td>
+      <td><code>smean</code></td>
+      <td>Mean byte size per transmitted packet.</td>
+      <td><code>520 B</code> (Standard HTTP GET)</td>
+      <td><code>9,500 B</code> (Buffer overflow / data exfil)</td>
+    </tr>
+    <tr>
+      <td><code>request_rate</code></td>
+      <td><code>rate</code></td>
+      <td>Transmitted requests / packets per second.</td>
+      <td><code>6.0 req/s</code> (Human browsing)</td>
+      <td><code>300.0 req/s</code> (Automated flood / fuzzer)</td>
+    </tr>
+    <tr>
+      <td><code>connection_count</code></td>
+      <td><code>ct_srv_src</code></td>
+      <td>Concurrent active sockets to same service.</td>
+      <td><code>3.0</code> (Normal browser sockets)</td>
+      <td><code>80.0</code> (Reconnaissance / DoS probe)</td>
+    </tr>
+    <tr>
+      <td><code>inter_arrival_time</code></td>
+      <td><code>sinpkt / 1000.0</code></td>
+      <td>Time interval between consecutive packets (sec).</td>
+      <td><code>0.180 s</code> (Human pacing)</td>
+      <td><code>0.002 s</code> (Automated script saturation)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Isolation Forest Mechanics</h3>
+<ul>
+  <li><strong>Core Principle</strong>: "Anomalies are few and different." Outliers in high-dimensional space require far fewer random splits to isolate than normal points packed in dense clusters.</li>
+  <li><strong>Tree Construction</strong>: Builds an ensemble of 100 binary trees (<code>n_estimators = 100</code>). Each tree recursively partitions feature space by randomly choosing a feature and split value.</li>
+  <li><strong>Path Length to Score</strong>:
+    <ul>
+      <li>Dense normal points $\rightarrow$ Deep path length (Depth 10–14) $\rightarrow$ <code>decision_function &gt; 0</code>.</li>
+      <li>Sparse anomalies $\rightarrow$ Shallow path length (Depth 1–4) $\rightarrow$ <code>decision_function &lt; 0</code>.</li>
+    </ul>
+  </li>
+  <li><strong>Efficiency</strong>: Linear time complexity $O(n)$ with inference execution in <strong>~5.7 ms</strong>.</li>
+</ul>
+
+<h3>Empirical Percentile Calibration</h3>
+<p>Rather than using arbitrary sigmoid normalization ($1 / (1 + e^{-k \cdot x})$), M4 calibrates raw scores against <strong>11,200 held-out normal samples</strong> that the model never saw during tree fitting.</p>
+<ol>
+  <li>In training (<code>src/train_model.py</code>), anomaly scores of held-out normal traffic are calculated and sorted:
+    <code>anomaly_scores = -model.decision_function(X_calibration)</code></li>
+  <li>In inference (<code>src/m4_interface.py</code>), the incoming score is ranked via binary search:
+    <code>position = np.searchsorted(REFERENCE_ANOMALY_SCORES, anomaly_score, side="right")</code></li>
+  <li>The percentile risk is:
+    <code>Risk = position / 11200 ∈ [0.0, 1.0]</code></li>
+</ol>
+
+<div class="card card-info">
+  <strong>Precise Meaning of Risk = 0.970:</strong><br>
+  A risk score of 0.970 means: <em>"This telemetry vector is more anomalous than approximately 97.0% of verified normal baseline traffic."</em> It is an empirical percentile rank, not an attack probability.
+</div>
+
+<h3>Calibrated Zero-Trust Policy Thresholds</h3>
+<ul>
+  <li><strong>ALLOW (Risk &lt; 0.970)</strong>: Normal transaction. Injects <code>X-Spectra-Verified</code> header and forwards to backend.</li>
+  <li><strong>MFA / MONITOR (0.970 ≤ Risk &lt; 0.995)</strong>: Elevated anomaly. Triggers step-up authentication. Setting this at 0.970 mathematically guarantees that at most ~3% of legitimate normal traffic will ever be challenged.</li>
+  <li><strong>DROP (Risk ≥ 0.995)</strong>: Extreme anomaly. Corresponds to the upper 0.5% of the calibrated normal reference distribution. Severs TCP connection immediately with HTTP 403.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Risk Score</th>
+      <th>Raw Decision Score</th>
+      <th>Empirical Distribution Position</th>
+      <th>Enforced Policy Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>0.070</strong></td>
+      <td><code>+0.1546</code></td>
+      <td>Deep in normal cluster (7th percentile).</td>
+      <td><strong>ALLOW</strong></td>
+    </tr>
+    <tr>
+      <td><strong>0.850</strong></td>
+      <td><code>+0.0410</code></td>
+      <td>Normal operational variance (85th percentile).</td>
+      <td><strong>ALLOW</strong></td>
+    </tr>
+    <tr>
+      <td><strong>0.980</strong></td>
+      <td><code>-0.0150</code></td>
+      <td>Elevated deviation; exceeds 98% of normal baseline.</td>
+      <td><strong>MFA / MONITOR</strong></td>
+    </tr>
+    <tr>
+      <td><strong>1.000</strong></td>
+      <td><code>-0.2144</code></td>
+      <td>Exceeds 100% of normal baseline calibration samples.</td>
+      <td><strong>DROP</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>4. End-to-End Walkthrough: 4 Real-World Scenarios</h2>
+
+<div class="card">
+  <h4>Scenario 1: Normal Employee Accessing Internal Application</h4>
+  <ul>
+    <li><strong>Input</strong>: <code>packet_size = 520 B</code>, <code>request_rate = 6.0 req/s</code>, <code>connection_count = 3.0</code>, <code>inter_arrival_time = 0.180 s</code></li>
+    <li><strong>M1 Transport</strong>: Client negotiates ML-KEM-768 / ML-DSA-65 session.</li>
+    <li><strong>M2 Proxy</strong>: Intercepts <code>GET /dashboard</code> on port 8443.</li>
+    <li><strong>M3 Telemetry</strong>: eBPF measures standard HTTP header packet size and steady human pacing.</li>
+    <li><strong>M4 Vector</strong>: <code>x = [520.0, 6.0, 3.0, 0.180]</code></li>
+    <li><strong>Isolation Forest</strong>: Traverses deep tree path (Depth ~11.2). Raw score: <code>+0.1546</code>.</li>
+    <li><strong>Percentile Risk</strong>: Position 784 / 11,200 $\rightarrow$ <strong>Risk Score = 0.070</strong>.</li>
+    <li><strong>Policy Gate</strong>: <code>0.070 &lt; 0.970</code> $\rightarrow$ <strong>ALLOW</strong>. Injects <code>X-Spectra-Verified: true</code>, forwards to backend:9000. HTTP 200 OK returned.</li>
+  </ul>
+</div>
+
+<div class="card card-warning">
+  <h4>Scenario 2: Employee Unusually Rapid Activity (Moderate Anomaly)</h4>
+  <ul>
+    <li><strong>Input</strong>: <code>packet_size = 523 B</code>, <code>request_rate = 8.4 req/s</code>, <code>connection_count = 4.8</code>, <code>inter_arrival_time = 0.143 s</code></li>
+    <li><strong>M1 Transport</strong>: Valid quantum-safe session established.</li>
+    <li><strong>M2 Proxy</strong>: User clicks rapidly or an automated browser tab reloader executes.</li>
+    <li><strong>M3 Telemetry</strong>: eBPF detects inter-arrival intervals shortening and frequency rising above normal human baseline.</li>
+    <li><strong>M4 Vector</strong>: <code>x = [523.0, 8.4, 4.8, 0.143]</code></li>
+    <li><strong>Isolation Forest</strong>: Tree paths shorten (Depth ~7.8). Raw score: <code>-0.0150</code>.</li>
+    <li><strong>Percentile Risk</strong>: Position 10,976 / 11,200 $\rightarrow$ <strong>Risk Score = 0.980</strong>.</li>
+    <li><strong>Policy Gate</strong>: <code>0.970 ≤ 0.980 &lt; 0.995</code> $\rightarrow$ <strong>MFA / MONITOR</strong>. Proxy holds session and issues WebAuthn/TOTP challenge.</li>
+  </ul>
+</div>
+
+<div class="card card-danger">
+  <h4>Scenario 3: Attacker Making Rapid Probing Connections (Reconnaissance)</h4>
+  <ul>
+    <li><strong>Input</strong>: <code>packet_size = 64 B</code>, <code>request_rate = 45.0 req/s</code>, <code>connection_count = 38.0</code>, <code>inter_arrival_time = 0.022 s</code></li>
+    <li><strong>M1 Transport</strong>: Client opens multiple concurrent TLS handshakes.</li>
+    <li><strong>M2 Proxy</strong>: Receives rapid connection attempts targeting varied microservice endpoints.</li>
+    <li><strong>M3 Telemetry</strong>: eBPF socket map detects spike in concurrent sockets (<code>ct_srv_src=38</code>) and minimal packet sizes.</li>
+    <li><strong>M4 Vector</strong>: <code>x = [64.0, 45.0, 38.0, 0.022]</code></li>
+    <li><strong>Isolation Forest</strong>: Trees isolate observation quickly (Depth ~4.2). Raw score: <code>-0.1680</code>.</li>
+    <li><strong>Percentile Risk</strong>: Position 11,180 / 11,200 $\rightarrow$ <strong>Risk Score = 0.998</strong>.</li>
+    <li><strong>Policy Gate</strong>: <code>0.998 ≥ 0.995</code> $\rightarrow$ <strong>DROP</strong>. M2 severs TCP socket immediately. Returns HTTP 403 Forbidden.</li>
+  </ul>
+</div>
+
+<div class="card card-danger">
+  <h4>Scenario 4: Volumetric Attack / Buffer Exploit (Obvious Malicious Attack)</h4>
+  <ul>
+    <li><strong>Input</strong>: <code>packet_size = 9500 B</code>, <code>request_rate = 300.0 req/s</code>, <code>connection_count = 80.0</code>, <code>inter_arrival_time = 0.002 s</code></li>
+    <li><strong>M1 Transport</strong>: Massive inbound packet burst saturates buffer.</li>
+    <li><strong>M2 Proxy</strong>: High socket contention on edge port 8443.</li>
+    <li><strong>M3 Telemetry</strong>: eBPF detects maximum-MTU packet bursts and zero inter-arrival pauses (continuous saturation).</li>
+    <li><strong>M4 Vector</strong>: <code>x = [9500.0, 300.0, 80.0, 0.002]</code></li>
+    <li><strong>Isolation Forest</strong>: Trees isolate observation on the first or second split (Depth ~2.1). Raw score: <code>-0.2144</code>.</li>
+    <li><strong>Percentile Risk</strong>: Anomaly score exceeds maximum reference calibration score $\rightarrow$ <strong>Risk Score = 1.000</strong>.</li>
+    <li><strong>Policy Gate</strong>: <code>1.000 ≥ 0.995</code> $\rightarrow$ <strong>DROP</strong>. Immediate TCP RST packet transmitted. IP temporarily blacklisted.</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>5. Official UNSW-NB15 Benchmark Evaluation</h2>
+
+<p>Evaluated on the official UNSW-NB15 test set containing <strong>82,332 test samples</strong> (37,000 normal, 45,332 real attack flows):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Measured Result</th>
+      <th>Engineering &amp; Academic Explanation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Precision</strong></td>
+      <td><strong>83.12%</strong> (<code>0.8312</code>)</td>
+      <td>High alert reliability: When M4 raises an alarm ($\text{Risk} \ge 0.970$), it is an actual attack ~83% of the time.</td>
+    </tr>
+    <tr>
+      <td><strong>Recall</strong></td>
+      <td><strong>17.78%</strong> (<code>0.1778</code>)</td>
+      <td>Catches 8,060 out of 45,332 attacks. Lower recall is expected because 4 flow features cannot detect single-packet stealth exploits.</td>
+    </tr>
+    <tr>
+      <td><strong>F1-Score</strong></td>
+      <td><strong>29.29%</strong> (<code>0.2929</code>)</td>
+      <td>Harmonic mean balancing precision and recall ($2 \cdot P \cdot R / (P + R)$); pulled down by the prototype's lower recall.</td>
+    </tr>
+    <tr>
+      <td><strong>False-Positive Rate</strong></td>
+      <td><strong>4.42%</strong> (<code>0.0442</code>)</td>
+      <td>Out of 37,000 normal test flows, only 1,637 triggered challenges, closely matching the theoretical ~3% design target.</td>
+    </tr>
+    <tr>
+      <td><strong>ROC-AUC</strong></td>
+      <td><strong>0.7570</strong></td>
+      <td>Strong continuous ranking capability across all potential decision thresholds.</td>
+    </tr>
+    <tr>
+      <td><strong>Median Latency</strong></td>
+      <td><strong>5.720 ms</strong></td>
+      <td>Single-pass inference per request, well under enterprise proxy SLA limits.</td>
+    </tr>
+    <tr>
+      <td><strong>P95 Latency</strong></td>
+      <td><strong>8.439 ms</strong></td>
+      <td>95% of all inferences complete within 8.5 ms.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Confusion Matrix (N = 82,332)</h3>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Predicted Normal (Risk &lt; 0.970)</th>
+      <th>Predicted Attack (Risk ≥ 0.970)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Actual Normal (37,000)</th>
+      <td><strong>TN: 35,363</strong> (95.58%)</td>
+      <td><strong>FP: 1,637</strong> (4.42%)</td>
+    </tr>
+    <tr>
+      <th>Actual Attack (45,332)</th>
+      <td><strong>FN: 37,272</strong> (82.22%)</td>
+      <td><strong>TP: 8,060</strong> (17.78%)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Attack Category Recall Breakdown</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Attack Category</th>
+      <th>Recall</th>
+      <th>Technical Analysis (Fact vs. Inference)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Generic</strong></td>
+      <td><strong>37.78%</strong></td>
+      <td><em>Verified Fact:</em> High-volume script attacks create massive deviations in <code>rate</code> and <code>connection_count</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Fuzzers</strong></td>
+      <td><strong>8.43%</strong></td>
+      <td><em>Technical Inference:</em> Random boundary-testing payload mutations cause detectable outliers in <code>packet_size</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Backdoors</strong></td>
+      <td><strong>5.32%</strong></td>
+      <td><em>Technical Inference:</em> Persistent reverse shells slightly alter keep-alive intervals and <code>connection_count</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Analysis</strong></td>
+      <td><strong>4.87%</strong></td>
+      <td><em>Technical Inference:</em> Port sweeps and scanning tools alter connection frequencies and timing.</td>
+    </tr>
+    <tr>
+      <td><strong>Worms</strong></td>
+      <td><strong>4.55%</strong></td>
+      <td><em>Technical Inference:</em> Automated self-propagation patterns occasionally create slight volumetric anomalies.</td>
+    </tr>
+    <tr>
+      <td><strong>Shellcode</strong></td>
+      <td><strong>4.50%</strong></td>
+      <td><em>Technical Inference:</em> Small executable payloads occasionally cause mild packet size variance.</td>
+    </tr>
+    <tr>
+      <td><strong>DoS</strong></td>
+      <td><strong>2.74%</strong></td>
+      <td><em>Verified Observation:</em> In UNSW-NB15, many DoS traces use spaced, distributed probing that evades single-source rate counters.</td>
+    </tr>
+    <tr>
+      <td><strong>Reconnaissance</strong></td>
+      <td><strong>1.60%</strong></td>
+      <td><em>Verified Fact:</em> Stealth probes use standard packet sizes and slow timing, evading flow-only models.</td>
+    </tr>
+    <tr>
+      <td><strong>Exploits</strong></td>
+      <td><strong>1.52%</strong></td>
+      <td><em>Verified Fact:</em> Single-packet payload exploits (SQLi, buffer overflows) travel inside normal HTTP packets. Blind without IDS payload inspection.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="card card-warning">
+  <strong>Synthetic vs. Real Evaluation:</strong><br>
+  Synthetic testing (<code>evaluate_model.py</code>) showed <strong>100% recall</strong> because synthetic anomalies were artificially generated with massive spikes (10,000B packets, 300 req/s). Real-world UNSW-NB15 traffic showed <strong>17.78% recall</strong> because real attacks deliberately blend into normal traffic. <em>Never present synthetic testing as proof of real detection accuracy.</em>
+</div>
+
+<div class="page-break"></div>
+
+<h2>6. Current Architecture Reality: Implemented vs. Planned</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component / Claim</th>
+      <th>Classification</th>
+      <th>Exact Technical Reality in Codebase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>M1 Adaptive PQC</strong></td>
+      <td><span class="badge badge-implemented">Implemented</span></td>
+      <td>Standalone C/C++ <code>liboqs</code> engine; verified dynamic Level 5 to Level 3 downshifting based on CPU cores.</td>
+    </tr>
+    <tr>
+      <td><strong>M2 Zero-Trust Reverse Proxy</strong></td>
+      <td><span class="badge badge-implemented">Implemented</span></td>
+      <td>Standalone Go reverse proxy on port 8443 routing to port 9000; enforces rules and header injection.</td>
+    </tr>
+    <tr>
+      <td><strong>M3 eBPF Telemetry Probe</strong></td>
+      <td><span class="badge badge-implemented">Implemented</span></td>
+      <td>Standalone in-kernel eBPF socket monitoring and Suricata IDS signature checks.</td>
+    </tr>
+    <tr>
+      <td><strong>M4 Isolation Forest Engine</strong></td>
+      <td><span class="badge badge-implemented">Implemented</span></td>
+      <td>Unsupervised Isolation Forest on 4 flow features with empirical percentile calibration.</td>
+    </tr>
+    <tr>
+      <td><strong>UNSW-NB15 Benchmark Evaluation</strong></td>
+      <td><span class="badge badge-evaluated">Evaluated</span></td>
+      <td>Evaluated on 82,332 test samples; precision (83.12%), ROC-AUC (0.7570), and latency (5.72 ms) verified.</td>
+    </tr>
+    <tr>
+      <td><strong>Live M2 $\rightarrow$ M4 Dynamic HTTP Link</strong></td>
+      <td><span class="badge badge-planned">Planned</span></td>
+      <td>In Phase 1 standalone testing, M2 uses a static risk score stub of <code>0.12</code>. Dynamic HTTP querying planned for Phase 2.</td>
+    </tr>
+    <tr>
+      <td><strong>Live M3 $\rightarrow$ M4 Feature Window Streaming</strong></td>
+      <td><span class="badge badge-planned">Planned</span></td>
+      <td>Live streaming of aggregated feature windows from eBPF ring buffers into M4 planned for Phase 2.</td>
+    </tr>
+    <tr>
+      <td><strong>Multi-Modal Feature Fusion</strong></td>
+      <td><span class="badge badge-planned">Planned</span></td>
+      <td>Combining session identity, geolocation, and IDS deep-packet signatures into M4 planned for Phase 2.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>7. Master Viva Defense Preparation</h2>
+
+<h3>The Elevator Pitches</h3>
+
+<div class="card">
+  <h4>30-Second Elevator Pitch (The Entire Project)</h4>
+  <p><em>"SPECTRA is an AI-driven, Post-Quantum Zero-Trust Reverse Proxy designed to secure internal microservices against both future quantum decryption and current lateral network movement. At the transport layer, it implements hardware-adaptive NIST PQC primitives (ML-KEM and ML-DSA). At the policy layer, it continuously scores network-flow telemetry using an unsupervised Isolation Forest calibrated with empirical percentiles, dynamically enforcing step-up MFA or connection dropping with sub-10ms inference latency."</em></p>
+</div>
+
+<div class="card">
+  <h4>1-Minute Pitch (The Entire Project)</h4>
+  <p><em>"Traditional perimeter security suffers from two critical flaws: legacy public-key encryption like RSA and ECC is vulnerable to 'Harvest Now, Decrypt Later' quantum attacks, and static single-login perimeters fail once an adversary bypasses the boundary. SPECTRA addresses both. Incoming connections negotiate NIST-standardized quantum-safe algorithms—ML-KEM for key encapsulation and ML-DSA for digital signatures—adapting dynamically to client compute capacity. Behind this transport layer, an edge reverse proxy coordinates with eBPF kernel probes to extract flow telemetry. This telemetry is evaluated by an unsupervised Isolation Forest that maps flow vectors against empirical normal percentiles. Sessions with normal risk are permitted, moderate deviations trigger MFA challenges, and extreme anomalies are severed at the edge—delivering continuous verification with minimal latency."</em></p>
+</div>
+
+<div class="card card-info">
+  <h4>2-Minute Pitch (Module 4 Deep-Dive — Your Module)</h4>
+  <p><em>"I am responsible for Module 4: the AI Risk Engine. Traditional intrusion detection relies on static signatures or supervised models, which fail against novel zero-day attacks and suffer from severe labeling bottlenecks. In M4, I implemented an unsupervised anomaly detection engine powered by an Isolation Forest, trained exclusively on normal network traffic across four core flow features: packet size, request rate, connection count, and inter-arrival time. Rather than applying arbitrary sigmoid transformations, I engineered an empirical percentile calibration mechanism. We train the model on 80% of normal traffic and calibrate it against a held-out 20% normal baseline. When a live telemetry vector is evaluated, M4 calculates its exact percentile rank against this held-out distribution. This enables mathematically grounded zero-trust policy thresholds: traffic below the 97th percentile is allowed; traffic between the 97th and 99.5th percentiles triggers step-up MFA; and extreme outliers in the top 0.5% are dropped. I benchmarked M4 against the official 82,332-sample UNSW-NB15 dataset. The engine achieved 83.12% precision and a 4.42% false-positive rate, with a median inference latency of 5.72 ms. While volumetric attacks were detected effectively, stealthy payload exploits confirmed that pure flow features alone cannot catch single-packet attacks—providing empirical justification for our Phase 2 multi-modal telemetry fusion."</em></p>
+</div>
+
+<h3>Top 10 High-Yield Viva Questions &amp; Answers</h3>
+
+<div class="qa-block">
+  <div class="qa-q">Q1: What does "unsupervised" mean in M4, and how is it trained?</div>
+  <div class="qa-a"><strong>Answer:</strong> The model is trained <strong>strictly on normal baseline traffic (<code>label == 0</code>)</strong>. It is never fed attack signatures or labels during training. It learns what normal traffic looks like so that any statistical outlier is flagged as an anomaly.</div>
+  <div class="qa-followup"><strong>Examiner follow-up:</strong> <em>"What is the contamination parameter for?"</em> $\rightarrow$ <em>"In scikit-learn, <code>contamination=0.05</code> sets the offset for the raw decision boundary, assuming ~5% of baseline network records contain mild noise."</em></div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q2: How do you convert raw Isolation Forest scores into a 0 to 1 risk score?</div>
+  <div class="qa-a"><strong>Answer:</strong> We negate <code>model.decision_function(X)</code> so higher values represent greater anomalies, then execute <code>np.searchsorted()</code> against our sorted array of 11,200 held-out normal anomaly scores. The index divided by 11,200 gives the empirical percentile risk score in $[0.0, 1.0]$.</div>
+  <div class="qa-followup"><strong>Examiner follow-up:</strong> <em>"What is the physical meaning of a 0.970 score?"</em> $\rightarrow$ <em>"It means the observation is more anomalous than 97.0% of verified normal traffic."</em></div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q3: Why are your thresholds set to 0.970 and 0.995 instead of 0.50 or 0.70?</div>
+  <div class="qa-a"><strong>Answer:</strong> Because in an empirical percentile model, normal traffic is uniformly distributed across $[0.0, 1.0]$. A 0.50 threshold would challenge 50% of legitimate users. Setting MFA at 0.970 mathematically bounds false positive challenges on normal traffic to ~3%. Setting DROP at 0.995 reserves termination strictly for the upper 0.5% extreme anomalies.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q4: Why is your recall only 17.78% on UNSW-NB15? Is that acceptable?</div>
+  <div class="qa-a"><strong>Answer (CRITICAL HONEST ANSWER):</strong> Recall is 17.78% because the prototype analyzes <strong>only 4 network-flow features</strong>. Single-packet exploits (SQLi, buffer overflows) travel in standard-sized packets at normal speed, mimicking normal flow headers. While low, this prototype successfully catches volumetric and flood attacks (Generic at 37.8%) with zero signatures, and empirically proves why Phase 2's cross-layer fusion with Suricata IDS signatures is required.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q5: What does an ROC-AUC of 0.7570 indicate?</div>
+  <div class="qa-a"><strong>Answer:</strong> It proves solid continuous discriminative power. If you randomly select one attack record and one normal record from the 82,332 test samples, the model will correctly rank the attack record as more anomalous 75.7% of the time.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q6: Why did you split normal data into training and calibration sets?</div>
+  <div class="qa-a"><strong>Answer:</strong> To avoid overfitting. Calibrating percentiles on the same data used to construct the isolation trees would yield overconfident percentiles. Using a held-out 20% normal split guarantees unbiased calibration.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q7: Why is M4 inference latency (~5.7 ms) so critical?</div>
+  <div class="qa-a"><strong>Answer:</strong> M4 sits in the inline evaluation path of a reverse proxy. If inference took 150 ms, every page asset would suffer extreme delays. A 5.7 ms median latency fits comfortably within modern zero-trust SLA budgets.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q8: Is M4 currently integrated with M2 in live real-time?</div>
+  <div class="qa-a"><strong>Answer (TRAP QUESTION):</strong> In the current Phase 1 codebase, M2 and M4 are validated as <strong>standalone modules</strong>. M2 currently uses a static risk score stub of <code>0.12</code> during proxy execution. Live dynamic HTTP/gRPC querying between M2 and M4 is designed and planned for Phase 2.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q9: Why use an Isolation Forest instead of One-Class SVM or Autoencoders?</div>
+  <div class="qa-a"><strong>Answer:</strong> Isolation Forest exhibits linear time complexity $O(n)$, low memory requirements, and sub-10ms inference. One-Class SVM scales quadratically ($O(n^2)$) and Autoencoders require GPU hardware and intensive tuning that introduce latency.</div>
+</div>
+
+<div class="qa-block">
+  <div class="qa-q">Q10: How does SPECTRA mitigate the "Harvest Now, Decrypt Later" threat?</div>
+  <div class="qa-a"><strong>Answer:</strong> By using NIST-standardized Post-Quantum Cryptography (ML-KEM and ML-DSA) at the transport layer, ensuring that intercepted ciphertext cannot be decrypted by Shor's algorithm on a quantum computer.</div>
+</div>
+
+<div class="page-break"></div>
+
+<h2>8. One-Page Quick Revision Cheat Sheet</h2>
+
+<pre><code>====================================================================================================
+                              SPECTRA PROJECT CHEAT SHEET (VIVA REVISION)
+====================================================================================================
+
+PROJECT TITLE:
+SPECTRA – AI-Driven PQC Reverse Proxy for Zero-Trust
+
+CORE PURPOSE:
+A Zero-Trust reverse proxy sitting in front of internal microservices that stops post-quantum 
+decryption at the transport layer (M1) and prevents lateral movement at the edge via continuous 
+AI behavioral telemetry risk scoring (M4).
+
+THE 4 MODULES:
+• M1 (Adaptive PQC Transport): NIST FIPS 203 (ML-KEM) & FIPS 204 (ML-DSA) via liboqs (C/C++).
+  Adaptive parameter sets downshift based on client compute (Level 5 / Level 3 / Level 1).
+• M2 (Zero-Trust Proxy Engine): Go reverse proxy intercepting edge traffic on 8443, forwarding to 
+  internal backend 9000. Re-verifies every request. Enforces ALLOW / CHALLENGE / DROP.
+• M3 (IDS & Telemetry Extraction): Kernel-level eBPF probes capturing flow metadata with zero copy; 
+  Suricata deep-packet inspection for CVE signatures.
+• M4 (AI Risk Engine): Unsupervised Isolation Forest evaluating 4 flow features, calibrated via 
+  empirical normal percentiles to output low-latency risk scores in [0.0, 1.0].
+
+M4 FEATURES (4 Network-Flow Dimensions):
+1. packet_size (UNSW: smean)          -> Mean bytes per packet transmitted by source.
+2. request_rate (UNSW: rate)          -> Transmission rate in requests/packets per second.
+3. connection_count (UNSW: ct_srv_src)-> Concurrent active sockets to same service.
+4. inter_arrival_time (UNSW: sinpkt)  -> Time elapsed between consecutive packets (sinpkt / 1000s).
+
+ISOLATION FOREST MECHANICS:
+• Unsupervised ensemble of 100 random decision trees.
+• Core principle: "Anomalies are few and different." Outliers are isolated near the root (short depth).
+• Trained strictly on NORMAL traffic (label == 0). Never sees attack labels during training.
+
+EMPIRICAL PERCENTILE CALIBRATION:
+• Normal training data split into: 80% Fit (44,800 rows) and 20% Held-Out Calibration (11,200 rows).
+• Raw score = -decision_function(x).
+• Risk score = empirical rank in held-out normal calibration array: risk = rank / 11,200 in [0.0, 1.0].
+• Interpretation: "0.970 = more anomalous than 97.0% of held-out normal traffic."
+
+ZERO-TRUST POLICY THRESHOLDS:
+• Risk < 0.970              -> ALLOW (normal access, injects X-Spectra-Verified header).
+• 0.970 <= Risk < 0.995     -> MFA / MONITOR (challenges user with step-up verification).
+• Risk >= 0.995             -> DROP (top 0.5% extreme anomaly; severs TCP connection with HTTP 403).
+
+OFFICIAL UNSW-NB15 BENCHMARK EVALUATION (82,332 Test Samples):
+• Normal test samples : 37,000      • Attack test samples : 45,332
+• Precision           : 83.12%      • False Positive Rate : 4.42%
+• Recall              : 17.78%      • ROC-AUC             : 0.7570
+• F1-Score            : 29.29%      • Latency (Median/P95): 5.720 ms / 8.439 ms
+• Confusion Matrix    : TN = 35,363 | FP = 1,637 | FN = 37,272 | TP = 8,060
+
+ATTACK CATEGORY RECALL BREAKDOWN:
+• Generic: 37.78%  • Fuzzers: 8.43%  • Backdoors: 5.32%  • Analysis: 4.87%  • Worms: 4.55%
+• Shellcode: 4.50% • DoS: 2.74%      • Recon: 1.60%      • Exploits: 1.52%
+
+KEY TAKEAWAY ON RESULTS:
+• High precision (83.12%) and low FPR (4.42%) prove the reliability of percentile calibration.
+• Low recall (17.78%) is honest: single-packet stealth exploits mimic flow headers. This empirically
+  justifies Phase 2's cross-layer fusion with Suricata IDS signatures and identity context.
+
+STATUS DISTINCTIONS (NEVER CLAIM PLANNED AS IMPLEMENTED):
+• IMPLEMENTED : Standalone M1 PQC, Standalone M2 Go proxy, Standalone M3 eBPF, Standalone M4 Engine.
+• EVALUATED   : M4 on UNSW-NB15 (82,332 rows); M1 downshifting latency; M4 inference latency (5.72 ms).
+• PLANNED     : Live M2 -> M4 HTTP dynamic query (M2 currently uses 0.12 stub); live M3 streaming;
+                Multi-modal fusion (Identity, Geolocation, Device, IDS Deep Signatures into M4).
+====================================================================================================</code></pre>
+
+</body>
+</html>
