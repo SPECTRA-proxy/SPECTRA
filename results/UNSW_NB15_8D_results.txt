@@ -1,0 +1,62 @@
+======================================================================
+  SPECTRA M4: 8-DIMENSIONAL REAL UNSW-NB15 BENCHMARK REPORT
+======================================================================
+Recorded Date        : 2026-10-26 21:34:15
+Model Architecture   : Isolation Forest (Unsupervised, fit on 44,800 normal samples)
+Dimensions (8)       : ['packet_size', 'request_rate', 'connection_count', 'inter_arrival_time', 'sttl', 'sjit', 'dmean', 'synack']
+Calibration Method   : Empirical Percentile on 11,200 held-out normal traffic
+Thresholds           : MFA >= 0.970 | DROP >= 0.995
+Inference Latency    : 3.02 µs / sample (248.5 ms total)
+----------------------------------------------------------------------
+OVERALL BENCHMARK METRICS (82,332 REAL TEST SAMPLES):
+  • Precision        : 75.29%
+  • Recall (TPR)     : 12.47%
+  • F1-Score         : 21.40%
+  • False-Alarm (FPR): 5.01%
+  • ROC-AUC Score    : 0.7848
+----------------------------------------------------------------------
+CONFUSION MATRIX:
+  True Negatives (Normal passed)    : 35,145 / 37,000
+  False Positives (Normal challenged): 1,855 (5.01% FPR)
+  False Negatives (Missed attacks)  : 39,679
+  True Positives (Attacks caught)   : 5,653 / 45,332
+----------------------------------------------------------------------
+PER-ATTACK CATEGORY DETECTION RECALL:
+  • Analysis          :   3.69%
+  • Backdoor          :   3.43%
+  • DoS               :   2.59%
+  • Exploits          :   1.72%
+  • Fuzzers           :  11.60%
+  • Generic           :  24.07%
+  • Normal            :   5.01%
+  • Reconnaissance    :   1.52%
+  • Shellcode         :   2.65%
+  • Worms             :   2.27%
+======================================================================
+
+HEAD-TO-HEAD COMPARISON: 4-FEATURE BASELINE vs. 8-FEATURE UPGRADE:
+----------------------------------------------------------------------
+Metric                    | 4-Feature Baseline   | 8-Feature Upgrade (Ours)
+----------------------------------------------------------------------
+Feature Set               | 4 request features   | 8 bidirectional features
+Total Features            | 4                    | 8                   
+Recall (Attacks Caught)   | 17.78%               | 12.47%              
+F1-Score                  | 29.29%               | 21.40%              
+FPR (False Alarm Rate)    | 4.42%                | 5.01%               
+ROC-AUC                   | 0.7570               | 0.7848              
+Attacks Missed (FN)       | 37,272               | 39,679              
+======================================================================
+
+ZERO-TRUST POLICY THRESHOLD SENSITIVITY (8-FEATURE MODEL):
+In a production Zero-Trust deployment, the MFA challenge threshold controls 
+the security vs. user friction trade-off across 82,332 test samples:
+----------------------------------------------------------------------
+Risk Threshold | Recall (TPR) | Precision | F1-Score | False Alarm (FPR)
+----------------------------------------------------------------------
+0.70 (Aggressive) |  94.37%      |  70.03%   |  80.40%  |  49.47%
+0.80 (Balanced)   |  80.12%      |  75.25%   |  77.61%  |  32.28%
+0.85 (Recommended)|  54.49%      |  75.41%   |  63.27%  |  21.77%
+0.90 (Conservative)| 40.13%      |  75.30%   |  52.35%  |  16.13%
+0.95 (Strict)     |  24.65%      |  77.05%   |  37.36%  |   8.99%
+0.97 (Extreme Tail)| 12.47%      |  75.29%   |  21.40%  |   5.01%
+======================================================================

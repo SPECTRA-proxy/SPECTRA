@@ -40,6 +40,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 	"crypto/rand"
 
@@ -265,17 +266,56 @@ func (c *Connector) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	defer relayResp.Body.Close()
 
-	// Forward the proxy response back to the local caller
-	for k, vv := range relayResp.Header {
+	// If proxy rejected the relay request with non-200 (e.g. unknown session or tampering before decryption)
+	if relayResp.StatusCode != http.StatusOK {
+		for k, vv := range relayResp.Header {
+			for _, v := range vv {
+				w.Header().Add(k, v)
+			}
+		}
+		w.WriteHeader(relayResp.StatusCode)
+		io.Copy(w, relayResp.Body)
+		return
+	}
+
+	// Read encrypted response payload
+	sealedResp, err := io.ReadAll(io.LimitReader(relayResp.Body, 20*1024*1024))
+	if err != nil {
+		http.Error(w, "connector: failed to read relay response body", http.StatusBadGateway)
+		return
+	}
+
+	// Decrypt response using AES-256-GCM with the PQC session key
+	plainRespBytes, err := pqc.Open(c.sessionKey, sealedResp)
+	if err != nil {
+		log.Printf("[Connector] DECRYPT FAILED: response tampered or key mismatch: %v", err)
+		http.Error(w, "connector: proxy response integrity check failed — tampering detected", http.StatusBadGateway)
+		return
+	}
+
+	// Parse the decrypted raw HTTP response
+	decryptedResp, err := http.ReadResponse(bufio.NewReader(bytes.NewReader(plainRespBytes)), r)
+	if err != nil {
+		log.Printf("[Connector] PARSE ERROR: failed to parse decrypted response: %v", err)
+		http.Error(w, "connector: malformed decrypted response from proxy", http.StatusBadGateway)
+		return
+	}
+	defer decryptedResp.Body.Close()
+
+	// Forward decrypted status, headers, and body to the local caller
+	for k, vv := range decryptedResp.Header {
+		if strings.EqualFold(k, "Connection") || strings.EqualFold(k, "Transfer-Encoding") {
+			continue
+		}
 		for _, v := range vv {
 			w.Header().Add(k, v)
 		}
 	}
-	w.WriteHeader(relayResp.StatusCode)
-	io.Copy(w, relayResp.Body)
+	w.WriteHeader(decryptedResp.StatusCode)
+	io.Copy(w, decryptedResp.Body)
 
-	log.Printf("[Connector] ✓ Relayed %s %s → HTTP %d | %s / %s",
-		r.Method, r.RequestURI, relayResp.StatusCode, c.kemScheme, c.sigScheme)
+	log.Printf("[Connector] ✓ Relayed %s %s → HTTP %d (bidirectional PQC decrypted) | %s / %s",
+		r.Method, uri, decryptedResp.StatusCode, c.kemScheme, c.sigScheme)
 }
 
 // ────────────────────────────────────────────────────────────────────────────

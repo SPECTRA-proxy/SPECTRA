@@ -1,7 +1,9 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -46,6 +48,15 @@ func (sp *SpectraProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Step 0: Handle Step-Up MFA Verification Endpoint
 	if r.URL.Path == "/spectra/verify-mfa" && (r.Method == http.MethodPost || r.Method == http.MethodGet) {
 		sessionID := ExtractSessionID(r)
+		if sessionID == "" && r.Body != nil {
+			var mfaReq struct {
+				SessionID string `json:"session_id"`
+			}
+			bodyBytes, err := io.ReadAll(r.Body)
+			if err == nil && json.Unmarshal(bodyBytes, &mfaReq) == nil && mfaReq.SessionID != "" {
+				sessionID = mfaReq.SessionID
+			}
+		}
 		if sessionID == "" {
 			http.Error(w, "Missing X-Session-ID header or session cookie", http.StatusBadRequest)
 			return

@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/httptest"
 	"sync"
 	"time"
 
@@ -201,8 +202,37 @@ func newProxyMux(spectra *engine.SpectraProxy, ks *keyStore) http.Handler {
 		// Clear RequestURI so reverse proxy director functions properly
 		syntheticReq.RequestURI = ""
 
-		// Forward through the full SPECTRA engine (IDS + risk scoring + routing)
-		spectra.ServeHTTP(w, syntheticReq)
+		// Capture response from the SPECTRA engine (IDS + risk scoring + upstream routing)
+		rec := httptest.NewRecorder()
+		spectra.ServeHTTP(rec, syntheticReq)
+
+		// Serialize captured response (status code, headers, body) to HTTP/1.1 wire format
+		resp := rec.Result()
+		defer resp.Body.Close()
+
+		var rawRespBuf bytes.Buffer
+		if err := resp.Write(&rawRespBuf); err != nil {
+			log.Printf("[MOD 1 - PQC] RELAY: failed to serialize response: %v", err)
+			http.Error(w, "internal server error serializing response", http.StatusInternalServerError)
+			return
+		}
+
+		// Encrypt response payload using AES-256-GCM with the PQC session key
+		sealedResp, err := pqc.Seal(aesKey, rawRespBuf.Bytes())
+		if err != nil {
+			log.Printf("[MOD 1 - PQC] RELAY ENCRYPT FAILED session %s: %v", sessionID, err)
+			http.Error(w, "failed to encrypt response payload", http.StatusInternalServerError)
+			return
+		}
+
+		log.Printf("[MOD 1 - PQC] ✓ Response encrypted | session: %s | %d raw bytes -> %d encrypted bytes",
+			sessionID, rawRespBuf.Len(), len(sealedResp))
+
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Set("X-Spectra-Session-ID", sessionID)
+		w.Header().Set("X-Spectra-Encrypted", "AES-256-GCM")
+		w.WriteHeader(http.StatusOK)
+		w.Write(sealedResp)
 	})
 
 	// Catch-all: plain HTTP from browsers / curl / dev tools
